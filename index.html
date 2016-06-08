@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Face on a Founding Father</title>
+  <link rel="stylesheet" href="css/main.min.css">
+</head>
+<body>
+
+<button class="take-photo">Let's do this!</button>
+
+<section class="video-container">
+  <div class="face-outline"></div>
+  <video id="camera-stream" width="480px" height="360px" autoplay></video>
+  <button id="snapshot">Use snapshot</button>
+  <canvas style="display: none"></canvas>
+</section>
+
+<div class="final-composition">
+  <div class="image-capture--clip-mask">
+    <img class="image-capture"/>
+  </div>
+  <div class="founding-father-bg"></div>
+</div>
+
+<script src="js/j.js"></script>
+</body>
+</html>

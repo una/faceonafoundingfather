@@ -1,0 +1,16 @@
+@import 'base/base';
+
+.face-outline {
+  width: 170px;
+  height: 230px;
+  position: absolute;
+  top: 70px;
+  left: 150px;
+  border-radius: 50%;
+  border: 4px dotted red;
+  z-index: 2;
+}
+
+#camera-stream {
+  transform: rotateY(180deg);
+}
