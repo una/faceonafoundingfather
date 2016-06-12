@@ -58,5 +58,6 @@ document.querySelector('.take-photo').addEventListener('click', function(){
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width,
         canvas.height);
     document.querySelector('.image-capture').src = canvas.toDataURL();
+    uploadImage(document.querySelector('.image-capture'));
   };
 });

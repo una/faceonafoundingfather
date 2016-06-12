@@ -9,10 +9,11 @@ var gulp        = require('gulp'),
     cache       = require('gulp-cached'),
     prefix      = require('gulp-autoprefixer'),
     browserSync = require('browser-sync'),
-    reload      = browserSync.reload,
     minifyHTML  = require('gulp-minify-html'),
+    nodemon = require('gulp-nodemon'),
     size        = require('gulp-size'),
     gutil = require('gulp-util'),
+    reload = browserSync.reload,
     imagemin    = require('gulp-imagemin'),
     pngquant    = require('imagemin-pngquant'),
     plumber     = require('gulp-plumber'),
@@ -50,6 +51,7 @@ gulp.task('server-pack', (cb) => {
       progress: true,
       colors: true
     }));
+    browserSync.reload();
     cb();
   });
 });
@@ -72,19 +74,12 @@ gulp.task('scss', function() {
     .pipe(prefix())
     .pipe(rename('main.css'))
     .pipe(gulp.dest('public/css'))
-    .pipe(reload({stream:true}))
+
+    .pipe(browserSync.stream())
     .pipe(cssmin())
     .pipe(size({ gzip: true, showFiles: true }))
     .pipe(rename({ suffix: '.min' }))
-    .pipe(gulp.dest('public/css'))
-});
-
-gulp.task('browser-sync', function() {
-    browserSync({
-        server: {
-            baseDir: "public/"
-        }
-    });
+    .pipe(gulp.dest('public/css'));
 });
 
 gulp.task('deploy', function () {
@@ -94,11 +89,14 @@ gulp.task('deploy', function () {
 
 gulp.task('js', function() {
   gulp.src('src/js/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(babel({presets : ['es2015']}))
     .pipe(uglify())
     .pipe(size({ gzip: true, showFiles: true }))
     .pipe(concat('j.js'))
-    .pipe(gulp.dest('public/js'))
-    .pipe(reload({stream:true}));
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('public/js'));
+    reload();
 });
 
 gulp.task('scss-lint', function() {
@@ -126,10 +124,32 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('watch', function() {
+
+  gulp.watch(['app.js', 'modules/**/*.js'], ['server-pack']);
   gulp.watch('src/scss/**/*.scss', ['scss']);
-  gulp.watch('src/js/*.js', ['jshint', 'js']);
-  gulp.watch('src/*.html', ['minify-html']);
-  gulp.watch('src/img/*', ['imgmin']);
+  gulp.watch('./src/js/*.js', ['jshint', 'js']).on('change', reload);
+  gulp.watch('src/*.html', ['minify-html']).on('change', reload);
+  gulp.watch('src/img/*', ['imgmin']).on('change', reload);
+});
+
+//////////////////////////////
+// Nodemon Task
+//////////////////////////////
+gulp.task('nodemon', function (cb) {
+  nodemon({
+    'script': 'index.js',
+    'watch': 'index.js',
+    'env': {
+      'NODE_ENV': 'development'
+    }
+  })
+  .once('start', function () {
+    cb();
+  })
+  .on('restart', function () {
+    console.log('Restarted');
+    reload();
+  });
 });
 
 gulp.task('imgmin', function () {
@@ -142,4 +162,15 @@ gulp.task('imgmin', function () {
         .pipe(gulp.dest('public/img'));
 });
 
-gulp.task('default', ['browser-sync', 'server-pack', 'js', 'imgmin', 'minify-html', 'scss', 'watch']);
+//////////////////////////////
+// Browser Sync Task
+//////////////////////////////
+gulp.task('browser-sync', ['nodemon'], function () {
+  browserSync.init({
+    port: 8000,
+    proxy: 'http://localhost:3000/'
+  });
+});
+
+gulp.task('build', ['server-pack', 'js', 'imgmin', 'minify-html', 'scss']);
+gulp.task('default', ['browser-sync', 'build', 'watch']);
