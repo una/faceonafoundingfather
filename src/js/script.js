@@ -1,11 +1,13 @@
+/*jshint esversion: 6 */
 window.onload = function(){
-  if (window.location.pathname != "/"){
-      let filenmame = 'http://33ed3.http.dal05.cdn.softlayer.net/foundingfather-dev'+window.location.pathname+'.png';
-      document.querySelector('.image-capture').src = filenmame;
-  } else {
-      runCamera();
-  }
-}
+    if (window.location.pathname != "/"){
+        let index = window.location.pathname.lastIndexOf("/");
+        let filename = 'http://33ed3.http.dal05.cdn.softlayer.net/foundingfather-dev'+window.location.pathname.substr(index)+'.png';
+        document.querySelector('.image-capture').src = filename;
+    }else{
+        runCamera();
+    }
+};
 
 function dataURItoBlob(dataURI) {
     // convert base64/URLEncoded data component to raw binary data held in a string
@@ -25,6 +27,7 @@ function dataURItoBlob(dataURI) {
     }
 
     return new Blob([ia], {type:mimeString});
+
 }
 
 function uploadImage(selector){
@@ -45,16 +48,18 @@ function uploadImage(selector){
                 let imageWrapper = document.querySelector('.image-capture--clip-mask');
                 imageWrapper.removeChild(imageWrapper.querySelector('img'));
                 imageWrapper.appendChild(this);
-                window.history.replaceState(false, false, this.src.slice(0,this.length-4));
-            }
+                let index = this.src.lastIndexOf("/");
+                let fileName = this.src.slice(index,this.src.length-4);
+                window.history.pushState({}, 'Founding Father', '/founder'+fileName);
+            };
             let errorFunc = function (path){
                 if (errorCount < 30){
                     errorCount++;
                     setTimeout(function(){
-                        getImage(path)
+                        getImage(path);
                     }, 1000);
                 }
-            }
+            };
 
             let getImage = function(path){
                 try{
@@ -64,18 +69,18 @@ function uploadImage(selector){
                     image.classList.add('image-capture');
                     //as
                     image.onerror = function(){
-                        errorFunc(path)
+                        errorFunc(path);
                     };
                 }catch(e){
                     console.log(e);
                     e.stopPropagation();
                 }
-            }
+            };
             getImage(data.path);
         }else{
-            alert( 'Error. Please, contact the webmaster!' );
+            alert( 'Error. Please, contact the webmaster!' );   
         }
-    }
+    };
     ajax.onerror = () => {
         alert( 'Error. Please, try again!' );
     };
