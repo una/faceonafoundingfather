@@ -11,7 +11,7 @@ var pkgcloud = require("pkgcloud");
 module.exports = {
 
 	createObject: function(credentials, req, res){
-		crypto.pseudoRandomBytes(16, function (err, raw) {
+		crypto.pseudoRandomBytes(8, function (err, raw) {
 			//MAKE SURE THAT YOU SEND THE IMAGE AS IMAGE NOT WIREFRAME
 			var filename = raw.toString('hex') + '.' + mimeTypes.extension(req.file('image')._files[0].stream.headers['content-type']);
 			req.file('image')._files[0].stream.filename = filename;

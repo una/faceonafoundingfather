@@ -1,3 +1,12 @@
+window.onload = function(){
+    if (window.location.pathname != "/"){
+        let filenmame = 'http://33ed3.http.dal05.cdn.softlayer.net/foundingfather-dev'+window.location.pathname+'.png';
+        document.querySelector('.image-capture').src = filenmame;
+    }else{
+        runCamera();
+    }
+}
+
 function dataURItoBlob(dataURI) {
     // convert base64/URLEncoded data component to raw binary data held in a string
     let byteString;
@@ -36,6 +45,7 @@ function uploadImage(selector){
                 let imageWrapper = document.querySelector('.image-capture--clip-mask');
                 imageWrapper.removeChild(imageWrapper.querySelector('img'));
                 imageWrapper.appendChild(this);
+                window.history.replaceState(false, false, this.src.slice(0,this.length-4));
             }
             let errorFunc = function (path){
                 if (errorCount < 30){
