@@ -7,6 +7,10 @@ html, body {
   height: 100%;
 }
 
+body {
+  font-family: Georgia, serif;
+}
+
 .main {
   display: flex;
   // @media (max-width: $breakpoint--mobile) {

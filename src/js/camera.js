@@ -17,49 +17,41 @@ function runCamera(){
 
 
     // Check that the browser supports getUserMedia.
-    // If it doesn't show an alert, otherwise continue.
     if (navigator.getUserMedia) {
       // Request the camera.
-      navigator.getUserMedia(
-        // Constraints
-        {
-          video: true
-        },
+      navigator.getUserMedia({ video: true }, function(localMediaStream) {
+        // Get a reference to the video element on the page.
+        var vid = document.getElementById('camera-stream');
 
-        // Success Callback
-        function(localMediaStream) {
-          // Get a reference to the video element on the page.
-          var vid = document.getElementById('camera-stream');
+        // Create an object URL for the video stream and use this
+        // to set the video source.
+        vid.src = window.URL.createObjectURL(localMediaStream);
 
-          // Create an object URL for the video stream and use this
-          // to set the video source.
-          vid.src = window.URL.createObjectURL(localMediaStream);
-        },
+        var snapshotButton = document.querySelector('button#snapshot');
 
-        // Error Callback
-        function(err) {
+        // Put variables in global scope to make them available to the browser console.
+        var video = window.video = document.querySelector('video');
+        var canvas = window.canvas = document.querySelector('canvas');
+        canvas.width = 480;
+        canvas.height = 360;
+
+        snapshotButton.onclick = function() {
+          //capture the image onto the canvas
+          canvas.getContext('2d').drawImage(video, 0, 0, canvas.width,
+              canvas.height);
+          document.querySelector('.image-capture').src = canvas.toDataURL();
+          uploadImage(document.querySelector('.image-capture'));
+
+          // stop media
+          localMediaStream.getTracks()[0].stop()
+        };
+        }, function(err) {
           // Log the error to the console.
           console.log('The following error occurred when trying to use getUserMedia: ' + err);
         }
       );
-
     } else {
       alert('Sorry, your browser does not support getUserMedia');
-    }
-
-    var snapshotButton = document.querySelector('button#snapshot');
-
-    // Put variables in global scope to make them available to the browser console.
-    var video = window.video = document.querySelector('video');
-    var canvas = window.canvas = document.querySelector('canvas');
-    canvas.width = 480;
-    canvas.height = 360;
-
-    snapshotButton.onclick = function() {
-      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width,
-          canvas.height);
-      document.querySelector('.image-capture').src = canvas.toDataURL();
-      uploadImage(document.querySelector('.image-capture'));
     };
   });
 }

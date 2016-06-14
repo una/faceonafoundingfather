@@ -1,0 +1,68 @@
+#camera-stream {
+  transform: rotateY(180deg);
+  position: absolute;
+  z-index: -2;
+}
+
+.final-composition {
+  position: relative;
+}
+
+.fathers {
+  width: 600px;
+}
+
+.image-capture {
+  filter: sepia(1) saturate(2) hue-rotate(-14deg) contrast(1.25)
+}
+
+// if Washington
+.washington {
+  #camera-stream {
+    transform: rotateY(180deg);
+    bottom: 40px;
+    left: 50px;
+  }
+
+  .image-capture {
+    transform: rotateY(180deg);
+    position: absolute;
+    bottom: 40px;
+    left: 50px;
+    z-index: -1;
+  }
+}
+
+// if Jefferson
+.jefferson {
+  #camera-stream {
+    transform: rotateY(180deg);
+    top: 140px;
+    left: 40px;
+  }
+
+  .image-capture {
+    transform: rotateY(180deg);
+    position: absolute;
+    top: 140px;
+    left: 40px;
+    z-index: -1;
+  }
+}
+
+// if Hamilton
+.hamilton {
+  #camera-stream {
+    transform: rotateY(180deg);
+    top: 200px;
+    left: 0px;
+  }
+
+  .image-capture {
+    transform: rotateY(180deg);
+    position: absolute;
+    top: 200px;
+    left: 0px;
+    z-index: -1;
+  }
+}

@@ -1,10 +1,10 @@
 window.onload = function(){
-    if (window.location.pathname != "/"){
-        let filenmame = 'http://33ed3.http.dal05.cdn.softlayer.net/foundingfather-dev'+window.location.pathname+'.png';
-        document.querySelector('.image-capture').src = filenmame;
-    }else{
-        runCamera();
-    }
+  if (window.location.pathname != "/"){
+      let filenmame = 'http://33ed3.http.dal05.cdn.softlayer.net/foundingfather-dev'+window.location.pathname+'.png';
+      document.querySelector('.image-capture').src = filenmame;
+  } else {
+      runCamera();
+  }
 }
 
 function dataURItoBlob(dataURI) {
@@ -73,7 +73,7 @@ function uploadImage(selector){
             }
             getImage(data.path);
         }else{
-            alert( 'Error. Please, contact the webmaster!' );   
+            alert( 'Error. Please, contact the webmaster!' );
         }
     }
     ajax.onerror = () => {

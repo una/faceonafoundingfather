@@ -3,3 +3,4 @@ public/
 private/
 index.js
 **/*.map
+dist/
