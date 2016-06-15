@@ -172,5 +172,5 @@ gulp.task('browser-sync', ['nodemon'], function () {
   });
 });
 
-gulp.task('build', ['server-pack', 'js', 'imgmin', 'minify-html', 'scss']);
+gulp.task('build', ['server-pack', 'jshint', 'js', 'imgmin', 'minify-html', 'scss']);
 gulp.task('default', ['browser-sync', 'build', 'watch']);

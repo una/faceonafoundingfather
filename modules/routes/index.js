@@ -2,15 +2,7 @@ module.exports = function(app, softlayerObjStoreCredentials) {
     var path = require('path');
     var __dirname = path.resolve(path.dirname());
     var objStorage = require('../objectStorage/index.js');
-
-    // route for home page
-    // app.get('/', function(req, res){
-    //     res.static('index.html');
-    // });
-
-    // app.get('/test', function(req, res){
-    //     res.static('index.html');
-    // });
+    console.log(__dirname);
 
     app.post('/upload', function(req, res){
         objStorage.createObject(softlayerObjStoreCredentials,req,res);
@@ -18,6 +10,10 @@ module.exports = function(app, softlayerObjStoreCredentials) {
 
     app.post('/convert', function(req,res){
         converter.toPDF(req,res);
+    });
+
+    app.get('/founder/*', function(req, res){
+        res.sendFile(__dirname + '/public/index.html');
     });
 
 };
